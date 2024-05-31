@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route("/liveness")
 def liveness():
-    time.sleep(2)
     return "<h1><center>Liveness check completed</center><h1>"
 
 
