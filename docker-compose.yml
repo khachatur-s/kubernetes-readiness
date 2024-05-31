@@ -1,3 +1,4 @@
+---
 services:
   k8s_readiness:
     build:
