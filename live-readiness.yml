@@ -1,28 +1,25 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: healthcheck
+  name: k8s-readiness
   labels:
-    app: healthcheck
-
+    app: k8s-readiness
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: healthcheck
-
+      app: k8s-readiness
   template:
     metadata:
       labels:
-        app: healthcheck
-
+        app: k8s-readiness
     spec:
       containers:
-        - name: healthcheck-pod
-          image: sebinxavi/k8s-readiness:v1
+        - name: kubernetes-readiness
+          image: ghcr.io/khachatur-s/kubernetes-readiness:latest
           ports:
             - containerPort: 5000
-       
           livenessProbe:
             httpGet:
               path: /liveness
@@ -31,7 +28,6 @@ spec:
             timeoutSeconds: 2
             periodSeconds: 5
             failureThreshold: 2
-
           readinessProbe:
             httpGet:
               path: /readiness

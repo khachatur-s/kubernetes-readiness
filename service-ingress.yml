@@ -1,0 +1,19 @@
+---
+# Ingress service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-readiness-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: k8s-readiness.local  # put your domain here
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-readiness
+                port:
+                  number: 5000
