@@ -1,0 +1,40 @@
+name: Build PROD image
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Black Code Formatter
+      uses: lgeiger/black-action@v1.0.1
+      with:
+        args: "--check --diff --color -v *.py"
+    - name: Build and push image
+      run: |
+        docker build . --file Dockerfile --tag ghcr.io/khachatur-s/kubernetes-readiness:latest
+        docker push ghcr.io/khachatur-s/kubernetes-readiness:latest
+    - name: Send TG notification
+      if: always()
+      uses: appleboy/telegram-action@master
+      with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            *||GITHUB ACTIONS ${{ job.status }}||*
+            Repository: *${{ github.repository }}*
+            Commit author: *${{ github.actor }}*
+            Commit message: *${{ github.event.commits[0].message }}*
+            
+            CI STATUS: *${{ job.status }}*
