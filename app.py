@@ -14,7 +14,6 @@ def liveness():
 @app.route("/readiness")
 def readiness():
     try:
-        time.sleep(10)
         return "<h1><center>Readiness check completed</center><h1>"
     except Exception:
         raise HealthError("Readiness failed")
