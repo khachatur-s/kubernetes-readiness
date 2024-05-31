@@ -1,10 +1,12 @@
-# FROM alpine:3.8
 FROM python:alpine
-RUN mkdir /var/flaskapp
-WORKDIR /var/flaskapp
-COPY .  .
-RUN apk update
-RUN apk add python3
-RUN pip3 install -r requirements.txt
+LABEL org.opencontainers.image.title="Kubernetes Readiness"
+LABEL org.opencontainers.image.description="Kubernetes and liveness check test app"
+LABEL org.opencontainers.image.source="https://github.com/khachatur-s/kubernetes-readiness"
+LABEL org.opencontainers.image.authors="Khachatur Shahinyan <khachatur.s@pm.me>"
+
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 EXPOSE 5000 
-CMD ["python3","app.py"]
+CMD ["python","app.py"]

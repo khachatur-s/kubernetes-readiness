@@ -1,0 +1,15 @@
+services:
+  k8s_readiness:
+    build:
+      context: .
+      no_cache: true
+    container_name: k8s-readiness
+    image: ghcr.io/khachatur-s/kubernetes-readiness
+    ports:
+      - "5000:5000"
+    networks:
+      - k8s_readiness
+networks:
+  k8s_readiness:
+    name: k8s_readiness_net
+    driver: bridge
